@@ -34,5 +34,6 @@ setup(
         "cms.djangoapp": [
             "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
         ],
-    }
+    },
+    install_requires=["django-fake-model==0.1.4"],
 )
