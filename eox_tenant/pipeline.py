@@ -45,3 +45,39 @@ def safer_associate_by_email(backend, details, user=None, *args, **kwargs):
                 )
             return {'user': users[0],
                     'is_new': False}
+
+
+def safer_associate_by_signupsource(backend, request, details, user=None, *args, **kwargs):
+    """TODO"""
+    if user:
+        return None
+
+    email = details.get('email')
+    if email:
+        # Try to associate accounts registered with the same email address,
+        # only if it's a single object. AuthException is raised if multiple
+        # objects are returned.
+        users = list(backend.strategy.storage.user.get_users_by_email(email))
+        if not users:
+            return None
+        elif len(users) > 1:
+            raise EoxTenantAuthException(
+                backend,
+                'The given email address is associated with another account'
+            )
+        else:
+            if users[0].is_staff or users[0].is_superuser:
+                raise EoxTenantAuthException(
+                    backend,
+                    'It is not allowed to auto associate staff or admin users'
+                )
+            elif not users[0].usersignupsource_set.filter(site=request.META['HTTP_HOST']).exists():
+                raise EoxTenantAuthException(
+                    backend,
+                    'It is not allowed in the host'  # TODO
+                )
+            else:
+                return {
+                    'user': users[0],
+                    'is_new': False,
+                }
