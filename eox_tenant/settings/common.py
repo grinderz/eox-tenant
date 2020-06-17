@@ -2,7 +2,7 @@
 Common settings for eox_tenant project.
 """
 
-from path import Path as path
+from path import Path
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'secret-key'
@@ -57,6 +57,6 @@ def plugin_settings(settings):
         'TenantGeneratedCertificateProxy': True,
     }
     try:
-        settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
+        settings.MAKO_TEMPLATE_DIRS_BASE.insert(0, Path(__file__).abspath().dirname().dirname() / 'templates')  # pylint: disable=no-value-for-parameter
     except AttributeError:
         pass
