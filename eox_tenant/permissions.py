@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.utils import ProgrammingError
+from django.core.exceptions import ImproperlyConfigured
 
 LOGIN_ALL_TENANTS_PERMISSION_APP_LABEL = u'auth'
 LOGIN_ALL_TENANTS_PERMISSION_CODENAME = u'can_login_all_eox_tenants'
@@ -30,7 +31,7 @@ def load_permissions():
                 name='Can login to all eox-tenant Tenants',
                 content_type=content_type,
             )
-        except ProgrammingError:
+        except (ProgrammingError, ImproperlyConfigured):
             # This code runs when the app is loaded, if a migration has not been done a ProgrammingError exception
             # is raised we are bypassing those cases to let migrations run smoothly.
             pass

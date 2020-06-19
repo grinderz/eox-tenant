@@ -27,6 +27,7 @@ setup(
     author_email='contact@edunext.co',
     packages=['eox_tenant'],
     zip_safe=False,
+    include_package_data=True,
     entry_points={
         "lms.djangoapp": [
             "eox_tenant = eox_tenant.apps:EdunextOpenedxExtensionsTenantConfig"
